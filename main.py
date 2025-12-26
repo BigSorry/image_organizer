@@ -45,12 +45,11 @@ def read_media(folder_path, image_only=True):
 if __name__ == '__main__':
     input_path = "F:/DCIM/DJI_001/*.*"
     image_paths = sorted(glob.glob(input_path))
-    image_paths = image_paths[:10]
+    #image_paths = image_paths[:10]
     images, videos = read_media(image_paths, image_only=True)
 
     groups = grp.group_images_by_time(images, window_hours=6, window_minutes=1)
     print(f"Total groups formed: {len(groups)}")
-    #grp.save_groups_to_subfolders(groups, base_folder="./images")
-    print(images, videos)
+    grp.save_groups_to_subfolders(groups, base_folder="./images")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
