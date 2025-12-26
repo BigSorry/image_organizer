@@ -41,7 +41,8 @@ def save_groups_to_subfolders(groups, base_folder="output_groups"):
         for ts_str, img in group:
             # Save using timestamp as filename
             dt = datetime.strptime(ts_str, "%Y%m%d%H%M%S")
-            readable_ts = dt.strftime("%d-%m-%Y_%H-%M-%S")
-            cv2.imwrite(readable_ts, img)
+            filename = dt.strftime("%d_%m_%Y_%H-%M-%S") + ".jpg"
+            filepath = os.path.join(group_folder, filename)
+            cv2.imwrite(filepath, img)
 
         print(f"Saved group {i} with {len(group)} images to {group_folder}")
