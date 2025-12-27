@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import os
 import cv2
+import av
+
 
 def group_images_by_time(images_dict, window_hours=4, window_minutes=30):
     """
@@ -46,3 +48,19 @@ def save_groups_to_subfolders(groups, base_folder="output_groups"):
             cv2.imwrite(filepath, img)
 
         print(f"Saved group {i} with {len(group)} images to {group_folder}")
+
+def save_group_image(image_list, base_folder):
+    """
+    image_list: list with paths to images
+    output_path: path to save the image
+    """
+    os.makedirs(base_folder, exist_ok=True)
+    for ts_str, img_path in image_list:
+        # Save using timestamp as filename
+        dt = datetime.strptime(ts_str, "%Y%m%d%H%M%S")
+        filename = dt.strftime("%d_%m_%Y_%H-%M-%S") + ".jpg"
+        filepath = os.path.join(base_folder, filename)
+        # Read image from input and save it to a different sub-folder
+        img = cv2.imread(img_path)
+        cv2.imwrite(filepath, img)
+
