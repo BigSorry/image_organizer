@@ -6,7 +6,8 @@ import av
 
 def group_images_by_time(images_dict, window_hours=4, window_minutes=30):
     """
-    images_dict: dict[timestamp_str -> OpenCV image]
+    images_dict: dict[timestamp_str -> image path]
+    window_hours + window_minutes: time allowed between images in the same group
     Returns: list of groups, each group is list of (timestamp, image)
     """
     # Sort items by timestamp
@@ -16,14 +17,14 @@ def group_images_by_time(images_dict, window_hours=4, window_minutes=30):
     current_group = [items[0]]  # (timestamp, image)
     prev_dt = datetime.strptime(items[0][0], "%Y%m%d%H%M%S")
 
-    for ts, img in items[1:]:
+    for ts, img_path in items[1:]:
         curr_dt = datetime.strptime(ts, "%Y%m%d%H%M%S")
 
         if curr_dt - prev_dt <= timedelta(hours=window_hours, minutes=window_minutes):
-            current_group.append((ts, img))
+            current_group.append((ts, img_path))
         else:
             groups.append(current_group)
-            current_group = [(ts, img)]
+            current_group = [(ts, img_path)]
         prev_dt = curr_dt
 
     groups.append(current_group)
@@ -62,5 +63,5 @@ def save_group_image(image_list, base_folder):
         filepath = os.path.join(base_folder, filename)
         # Read image from input and save it to a different sub-folder
         img = cv2.imread(img_path)
-        cv2.imwrite(filepath, img)
+        #cv2.imwrite(filepath, img)
 
